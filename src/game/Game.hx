@@ -53,7 +53,6 @@ class Game extends dn.Process {
 
 
 	function onMouseUp(ev:hxd.Event) {
-		trace("up");
 	}
 
 
