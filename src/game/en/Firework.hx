@@ -6,7 +6,7 @@ class Firework extends Entity {
 
 	public function new() {
 		super(0,0);
-		color = Col.randomHSL(rnd(0,1), 0.7, 1);
+		color = Col.randomHSL(rnd(0,1), rnd(0.3,0.7), 1);
 		frict = R.around(0.95, 3);
 		spr.set(D.tiles.empty);
 	}

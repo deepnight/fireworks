@@ -159,6 +159,7 @@ class Fx extends GameProcess {
 			p.colorAnimS(c, "#810c0c", rnd(0.5,2));
 			p.alphaFlicker = 0.7;
 			p.scaleX = rnd(0.4,0.6);
+			p.scaleY = rnd(1,2,true);
 			p.autoRotate();
 			p.scaleXMul = rnd(0.95, 0.97);
 			p.moveAwayFrom( x, y, R.around(1.5, 15) * (0.5+0.5*dr) * (1*radius/60) );
@@ -171,7 +172,7 @@ class Fx extends GameProcess {
 		var n = M.ceil( 90*radius/30 );
 		for(i in 0...n) {
 			var a = R.fullCircle();
-			var dr = rnd(0, 0.7);
+			var dr = rnd(0.15, 0.8);
 			var p = allocMain_add(D.tiles.pixel, x+Math.cos(a)*dr*radius, y+Math.sin(a)*dr*radius);
 			p.setFadeS(rnd(0.9, 1), 0, R.around(0.3));
 			p.colorAnimS(c, "#810c0c", rnd(0.5,2));
