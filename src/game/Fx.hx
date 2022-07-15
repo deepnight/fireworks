@@ -13,7 +13,7 @@ class Fx extends GameProcess {
 	public function new() {
 		super();
 
-		pool = new ParticlePool(Assets.tiles.tile, 2048, Const.FPS);
+		pool = new ParticlePool(Assets.tiles.tile, 4096, Const.FPS);
 
 		bg_add = new h2d.SpriteBatch(Assets.tiles.tile);
 		game.scroller.add(bg_add, Const.DP_FX_BG);
@@ -134,21 +134,53 @@ class Fx extends GameProcess {
 	}
 
 
+	public function sparksTrail(x:Float, y:Float, c:Col, ang:Float) {
+		var p = allocMain_add(D.tiles.fxLineThinLeft, x, y);
+		p.setCenterRatio(1,0.5);
+		p.setFadeS(R.around(0.6), 0.1, 0.4);
+		p.colorize(c);
+		p.scaleX = rnd(0.3,0.6);
+		p.moveAng(ang, rnd(1,2));
+		p.rotation = ang;
+		p.frict = 0.9;
+		p.alphaFlicker = 0.7;
+		p.lifeS = R.around(0.5);
+	}
+
 
 	public inline function sparksBall(x:Float, y:Float, radius:Float, c:Col) {
-		var n = M.ceil( 150*radius/30 );
+		// Lines
+		var n = M.ceil( 90*radius/30 );
 		for(i in 0...n) {
 			var a = R.fullCircle();
 			var dr = rnd(0, 0.3);
-			var p = allocMain_add(D.tiles.pixel, x+Math.cos(a)*dr*radius, y+Math.sin(a)*dr*radius);
-			p.setFadeS(rnd(0.6, 1), 0, R.around(0.3));
+			var p = allocMain_add(D.tiles.fxLineThinLeft, x+Math.cos(a)*dr*radius, y+Math.sin(a)*dr*radius);
+			p.setFadeS(rnd(0.6, 0.9), 0, R.around(0.3));
 			p.colorAnimS(c, "#810c0c", rnd(0.5,2));
 			p.alphaFlicker = 0.7;
-			p.moveAwayFrom( x, y, R.around(1.5, 15) * (0.5+0.5*dr) * (1*radius/30) );
+			p.scaleX = rnd(0.4,0.6);
+			p.autoRotate();
+			p.scaleXMul = rnd(0.95, 0.97);
+			p.moveAwayFrom( x, y, R.around(1.5, 15) * (0.5+0.5*dr) * (1*radius/60) );
 			p.frict = R.aroundBO(0.98, 4);
 			p.gy = R.around(0.02, 5);
-			p.lifeS = rnd(0.6,2);
-			p.delayS = rnd(0,0.2);
+			p.lifeS = rnd(0.5,0.7);
+		}
+
+		// Dots
+		var n = M.ceil( 90*radius/30 );
+		for(i in 0...n) {
+			var a = R.fullCircle();
+			var dr = rnd(0, 0.7);
+			var p = allocMain_add(D.tiles.pixel, x+Math.cos(a)*dr*radius, y+Math.sin(a)*dr*radius);
+			p.setFadeS(rnd(0.9, 1), 0, R.around(0.3));
+			p.colorAnimS(c, "#810c0c", rnd(0.5,2));
+			p.alphaFlicker = 0.7;
+			p.moveAwayFrom( x, y, R.around(0.3, 15) * (0.5+0.5*dr) * (1*radius/100) );
+			p.frict = R.aroundBO(0.97, 4);
+			p.gy = R.around(0.005, 5);
+			p.lifeS = rnd(0.8, 1.4);
+			p.delayS = 0.6 + rnd(0, 0.3);
 		}
 	}
 

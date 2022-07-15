@@ -6,14 +6,25 @@ class Firework extends Entity {
 
 	public function new() {
 		super(0,0);
-		color = Yellow;
+		color = Col.randomHSL(rnd(0,1), 0.7, 1);
 		frict = R.around(0.95, 3);
+		spr.set(D.tiles.empty);
 	}
 
 	public function fromBottom(x:Float, y:Float) {
 		setPosPixel(x+rnd(20,60,true), game.h()/Const.SCALE);
 		target = LPoint.fromPixels(x,y);
-		dy = -rnd(0.1,0.2);
+		var a = Math.atan2(target.levelY-attachY, target.levelX-attachX);
+		dx = Math.cos(a)*0.1;
+		dy = Math.sin(a)*0.1;
+		dy -= rnd(0.1,0.2);
+	}
+
+	override function postUpdate() {
+		super.postUpdate();
+
+		if( !cd.hasSetS("tail",0.03) )
+			fx.sparksTrail(attachX, attachY, color, Math.atan2(dy,dx));
 	}
 
 	override function fixedUpdate() {
@@ -28,7 +39,7 @@ class Firework extends Entity {
 		if( distPx(target.levelX, target.levelY)<=20 ) {
 			destroy();
 			fx.halo(attachX, attachY, 1, color);
-			fx.sparksBall(attachX, attachY, rnd(20,100), color);
+			fx.sparksBall(attachX, attachY, rnd(90,100), color);
 		}
 	}
 }
