@@ -13,9 +13,6 @@ class Assets {
 	/** Main atlas **/
 	public static var tiles : SpriteLib;
 
-	/** LDtk world data **/
-	public static var worldData : World;
-
 
 	static var _initDone = false;
 	public static function init() {
@@ -53,24 +50,6 @@ class Assets {
 				Const.db.reload_const_json( hxd.Res.const.entry.getBytes().toString() );
 			}, 0.2);
 		});
-
-		// LDtk init & parsing
-		worldData = new World();
-
-		// LDtk file hot-reloading
-		#if debug
-		var res = try hxd.Res.load(worldData.projectFilePath.substr(4)) catch(_) null; // assume the LDtk file is in "res/" subfolder
-		if( res!=null )
-			res.watch( ()->{
-				// Only reload actual updated file from disk after a short delay, to avoid reading a file being written
-				App.ME.delayer.cancelById("ldtk");
-				App.ME.delayer.addS("ldtk", function() {
-					worldData.parseJson( res.entry.getText() );
-					if( Game.exists() )
-						Game.ME.onLdtkReload();
-				}, 0.2);
-			});
-		#end
 	}
 
 

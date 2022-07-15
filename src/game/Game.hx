@@ -7,14 +7,8 @@ class Game extends dn.Process {
 	/** Particles **/
 	public var fx : Fx;
 
-	/** Basic viewport control **/
-	public var camera : Camera;
-
 	/** Container of all visual game objects. Ths wrapper is moved around by Camera. **/
 	public var scroller : h2d.Layers;
-
-	/** Level data **/
-	public var level : Level;
 
 	/** UI **/
 	public var hud : ui.Hud;
@@ -23,6 +17,7 @@ class Game extends dn.Process {
 	var curGameSpeed = 1.0;
 	var slowMos : Map<String, { id:String, t:Float, f:Float }> = new Map();
 
+	var inter : h2d.Interactive;
 
 	public function new() {
 		super(App.ME);
@@ -39,9 +34,26 @@ class Game extends dn.Process {
 
 		fx = new Fx();
 		hud = new ui.Hud();
-		camera = new Camera();
 
-		startLevel(Assets.worldData.all_levels.FirstLevel);
+		inter = new h2d.Interactive(w(), h(), root);
+		inter.propagateEvents = true;
+		inter.onPush = onMouseDown;
+		inter.onRelease = onMouseUp;
+		inter.onReleaseOutside = onMouseUp;
+		inter.onOut = onMouseUp;
+
+		start();
+	}
+
+
+	function onMouseDown(ev:hxd.Event) {
+		var pt = LPoint.fromScreen( ev.relX, ev.relY );
+		new en.Firework(pt.levelX, pt.levelY);
+	}
+
+
+	function onMouseUp(ev:hxd.Event) {
+		trace("up");
 	}
 
 
@@ -56,18 +68,12 @@ class Game extends dn.Process {
 
 
 	/** Load a level **/
-	function startLevel(l:World.World_Level) {
-		if( level!=null )
-			level.destroy();
+	function start() {
 		fx.clear();
 		for(e in Entity.ALL) // <---- Replace this with more adapted entity destruction (eg. keep the player alive)
 			e.destroy();
 		garbageCollectEntities();
 
-		level = new Level(l);
-		// <---- Here: instanciate your level entities
-
-		camera.centerOnTarget();
 		hud.onLevelStart();
 		dn.Process.resizeAll();
 		dn.Gc.runNow();
@@ -82,17 +88,14 @@ class Game extends dn.Process {
 	}
 
 
-	/** Called when LDtk file changes on disk **/
-	@:allow(assets.Assets)
-	function onLdtkReload() {
-		hud.notify("LDtk reloaded");
-		if( level!=null )
-			startLevel( Assets.worldData.getLevel(level.data.uid) );
-	}
-
 	/** Window/app resize event **/
 	override function onResize() {
 		super.onResize();
+
+		inter.width = w();
+		inter.height = h();
+
+		scroller.setScale(Const.SCALE);
 	}
 
 
@@ -221,12 +224,6 @@ class Game extends dn.Process {
 					hud.notify(Lang.t._("Press ESCAPE again to exit."));
 				else
 					App.ME.exit();
-			#end
-
-			// Attach debug drone (CTRL-SHIFT-D)
-			#if debug
-			if( ca.isPressed(ToggleDebugDrone) )
-				new DebugDrone(); // <-- HERE: provide an Entity as argument to attach Drone near it
 			#end
 
 			// Restart whole game

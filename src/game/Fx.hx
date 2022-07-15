@@ -111,10 +111,6 @@ class Fx extends GameProcess {
 		#end
 	}
 
-	inline function collides(p:HParticle, offX=0., offY=0.) {
-		return level.hasCollision( Std.int((p.x+offX)/Const.GRID), Std.int((p.y+offY)/Const.GRID) );
-	}
-
 	public inline function flashBangS(c:Col, a:Float, t=0.1) {
 		var e = new h2d.Bitmap(h2d.Tile.fromColor(c,1,1,a));
 		game.root.add(e, Const.DP_FX_FRONT);

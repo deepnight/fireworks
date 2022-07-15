@@ -22,9 +22,6 @@ import en.*;
 // Castle DB
 import assets.CastleDb;
 
-// LDtk
-import assets.World;
-
 // Aliases
 import dn.RandomTools as R;
 import assets.Assets as A;

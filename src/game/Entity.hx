@@ -6,10 +6,8 @@ class Entity {
 	public var app(get,never) : App; inline function get_app() return App.ME;
 	public var game(get,never) : Game; inline function get_game() return Game.ME;
 	public var fx(get,never) : Fx; inline function get_fx() return Game.ME.fx;
-	public var level(get,never) : Level; inline function get_level() return Game.ME.level;
 	public var destroyed(default,null) = false;
 	public var ftime(get,never) : Float; inline function get_ftime() return game.ftime;
-	public var camera(get,never) : Camera; inline function get_camera() return game.camera;
 
 	var tmod(get,never) : Float; inline function get_tmod() return Game.ME.tmod;
 	var utmod(get,never) : Float; inline function get_utmod() return Game.ME.utmod;
@@ -341,17 +339,6 @@ class Entity {
 		pivotY = y!=null ? y : x;
 	}
 
-	/** Return TRUE if the Entity *center point* is in screen bounds (default padding is +32px) **/
-	public inline function isOnScreenCenter(padding=32) {
-		return camera.isOnScreen( centerX, centerY, padding + M.fmax(wid*0.5, hei*0.5) );
-	}
-
-	/** Return TRUE if the Entity rectangle is in screen bounds (default padding is +32px) **/
-	public inline function isOnScreenBounds(padding=32) {
-		return camera.isOnScreenRect( left,top, wid, hei, padding );
-	}
-
-
 	/**
 		Changed the current entity state.
 		Return TRUE if the state is `s` after the call.
@@ -420,18 +407,6 @@ class Entity {
 			return M.dist(attachX, attachY, e.attachX, e.attachY);
 		else
 			return return M.dist(attachX, attachY, x, y);
-	}
-
-	function canSeeThrough(cx:Int, cy:Int) {
-		return !level.hasCollision(cx,cy) || this.cx==cx && this.cy==cy;
-	}
-
-	/** Check if the grid-based line between this and given target isn't blocked by some obstacle **/
-	public inline function sightCheck(?e:Entity, ?tcx:Int, ?tcy:Int) {
-		if( e!=null)
-			return e==this ? true : dn.Bresenham.checkThinLine(cx, cy, e.cx, e.cy, canSeeThrough);
-		else
-			return dn.Bresenham.checkThinLine(cx, cy, tcx, tcy, canSeeThrough);
 	}
 
 	/** Create a LPoint instance from current coordinates **/
