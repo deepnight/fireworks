@@ -18,6 +18,7 @@ class Game extends dn.Process {
 	var slowMos : Map<String, { id:String, t:Float, f:Float }> = new Map();
 
 	var inter : h2d.Interactive;
+	var bg : h2d.Bitmap;
 
 	public function new() {
 		super(App.ME);
@@ -32,6 +33,7 @@ class Game extends dn.Process {
 		root.add(scroller, Const.DP_BG);
 		scroller.filter = new h2d.filter.Nothing(); // force rendering for pixel perfect
 
+		bg = new h2d.Bitmap( h2d.Tile.fromColor(Col.inlineHex("#25294d")), scroller );
 		fx = new Fx();
 		hud = new ui.Hud();
 
@@ -48,7 +50,8 @@ class Game extends dn.Process {
 
 	function onMouseDown(ev:hxd.Event) {
 		var pt = LPoint.fromScreen( ev.relX, ev.relY );
-		new en.Firework(pt.levelX, pt.levelY);
+		var f = new en.Firework();
+		f.fromBottom(pt.levelX, pt.levelY);
 	}
 
 
@@ -93,6 +96,9 @@ class Game extends dn.Process {
 
 		inter.width = w();
 		inter.height = h();
+
+		bg.scaleX = M.ceil( w()/Const.SCALE );
+		bg.scaleY = M.ceil( h()/Const.SCALE );
 
 		scroller.setScale(Const.SCALE);
 	}

@@ -2,14 +2,17 @@ package en;
 
 class Firework extends Entity {
 	var target : LPoint;
-	var col : Col;
+	public var color : Col;
 
-	public function new(x,y) {
+	public function new() {
 		super(0,0);
-		col = Yellow;
+		color = Yellow;
+		frict = R.around(0.95, 3);
+	}
+
+	public function fromBottom(x:Float, y:Float) {
 		setPosPixel(x+rnd(20,60,true), game.h()/Const.SCALE);
 		target = LPoint.fromPixels(x,y);
-		frict = 0.94;
 		dy = -rnd(0.1,0.2);
 	}
 
@@ -21,10 +24,11 @@ class Firework extends Entity {
 		dx += Math.cos(a) * s;
 		dy += Math.sin(a) * s;
 
-		if( attachY<=target.levelY ) {
+		// Reached target
+		if( distPx(target.levelX, target.levelY)<=20 ) {
 			destroy();
-			fx.halo(attachX, attachY, 1, col);
-			fx.sparksBall(attachX, attachY, rnd(20,100), col);
+			fx.halo(attachX, attachY, 1, color);
+			fx.sparksBall(attachX, attachY, rnd(20,100), color);
 		}
 	}
 }

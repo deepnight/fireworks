@@ -139,15 +139,16 @@ class Fx extends GameProcess {
 		var n = M.ceil( 150*radius/30 );
 		for(i in 0...n) {
 			var a = R.fullCircle();
-			var dr = rnd(0,1);
+			var dr = rnd(0, 0.3);
 			var p = allocMain_add(D.tiles.pixel, x+Math.cos(a)*dr*radius, y+Math.sin(a)*dr*radius);
 			p.setFadeS(rnd(0.6, 1), 0, R.around(0.3));
 			p.colorAnimS(c, "#810c0c", rnd(0.5,2));
 			p.alphaFlicker = 0.7;
-			p.moveAwayFrom( x, y, R.around(1.5, 15) * (0.5+0.5*(1-dr)) );
+			p.moveAwayFrom( x, y, R.around(1.5, 15) * (0.5+0.5*dr) * (1*radius/30) );
 			p.frict = R.aroundBO(0.98, 4);
 			p.gy = R.around(0.02, 5);
 			p.lifeS = rnd(0.6,2);
+			p.delayS = rnd(0,0.2);
 		}
 	}
 
