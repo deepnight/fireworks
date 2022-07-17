@@ -1,6 +1,8 @@
 package en;
 
 class PendingLetter extends Entity {
+	public static var ALL : FixedArray<PendingLetter> = new FixedArray(50);
+
 	public var letterIdx : Int;
 	var color : Col;
 	var done = false;
@@ -8,8 +10,7 @@ class PendingLetter extends Entity {
 
 	public function new(letterIdx:Int) {
 		super(0,0);
-		var p = 64;
-		setPosPixel( rnd(p,game.wid-p), rnd(p,game.hei-p) );
+		ALL.push(this);
 
 		this.letterIdx = letterIdx;
 		spr.set(D.tiles.empty);
@@ -25,8 +26,29 @@ class PendingLetter extends Entity {
 		cd.setS("fadeIn", 1);
 	}
 
+	override function dispose() {
+		super.dispose();
+		ALL.remove(this);
+	}
+
 	public static function createOne() : PendingLetter {
 		var l = new PendingLetter( R.irnd(0,25) );
+
+		// Try to find an empy screen location
+		var limit = 50;
+		var retry = true;
+		while( retry && limit-->0 ) {
+			retry = false;
+			var p = 64;
+			l.setPosPixel( R.rnd(p, Game.ME.wid-p), R.rnd(p, Game.ME.hei-p) );
+
+			for(e in ALL)
+				if( e!=l && e.distPx(l)<=80 ) {
+					retry = true;
+					break;
+				}
+		}
+
 		return l;
 	}
 
