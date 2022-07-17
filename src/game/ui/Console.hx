@@ -137,6 +137,8 @@ class Console extends h2d.Console {
 		stats = new dn.heaps.StatsBox(App.ME);
 		stats.addFpsChart();
 		stats.addDrawCallsChart();
+		@:privateAccess
+		stats.addCustomChart( "Fx", Yellow, ()->Game.exists() ? Game.ME.fx.pool.allocated : 0 );
 		#if hl
 		stats.addMemoryChart();
 		#end
