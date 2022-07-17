@@ -3,6 +3,7 @@ package en;
 class PendingLetter extends Entity {
 	public static var ALL : FixedArray<PendingLetter> = new FixedArray(50);
 
+	var tf : h2d.Text;
 	public var letterIdx : Int;
 	var color : Col;
 	var done = false;
@@ -16,7 +17,7 @@ class PendingLetter extends Entity {
 		spr.set(D.tiles.empty);
 		color = Col.randomHSL(R.zto(), R.around(0.7,20), 1);
 
-		var tf = new h2d.Text(Assets.fontLarge, spr);
+		tf = new h2d.Text(Assets.fontLarge, spr);
 		tf.text = String.fromCharCode( "A".code + letterIdx );
 		tf.x = Std.int( -tf.textWidth*0.5);
 		tf.y = Std.int( -tf.textHeight*0.5);
@@ -61,27 +62,29 @@ class PendingLetter extends Entity {
 		if( !done )
 			spr.alpha = ( 0.7 + 0.3*Math.sin(ftime*0.012) ) * (1-cd.getRatio("fadeIn"));
 		else
-			spr.alpha = 0.2 * cd.getRatio("keep");
+			spr.alpha = 1 * cd.getRatio("keep");
 
 		// Scale anim
 		sprScaleX+=ds*tmod;
 		sprScaleY+=ds*tmod;
 		ds*=Math.pow(0.9,tmod);
 
+		// Key pressed!
 		if( !done && game.ca.isKeyboardPressed(K.A + letterIdx) ) {
 			done = true;
 			ds = 0.03;
 			sprScaleX += 0.1;
 			sprScaleY += 0.1;
-			cd.setS("keep",0.5);
-			fx.halo(attachX, attachY, 1, color, 0.3);
+			cd.setS("keep",0.3);
+			tf.textColor = White;
+			fx.halo(attachX, attachY, 0.7, color, 0.4);
 			fx.explosion(attachX, attachY, color);
-			fx.sparksBall(attachX, attachY, 70, color);
+			fx.sparksBall(attachX, attachY, 100, color);
 			var n = 4;
-			for(i in 0...4)
+			for(i in 0...8)
 				game.delayer.addS(
-					fx.sparksBall.bind(attachX+rnd(10,30,true), attachY+rnd(10,30,true), rnd(40,60), color),
-					0.1 + 0.4*i/n
+					fx.sparksBall.bind(attachX+rnd(20,40,true), attachY+rnd(20,40,true), rnd(60,80), color),
+					0.1 + 0.7*i/n + rnd(0,0.05,true)
 				);
 
 			createOne();
