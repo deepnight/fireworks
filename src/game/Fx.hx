@@ -123,7 +123,7 @@ class Fx extends GameProcess {
 	}
 
 
-	public inline function halo(x:Float, y:Float, scale:Float, c:Col) {
+	public inline function halo(x:Float, y:Float, scale:Float, c:Col, alpha=1.0) {
 		var p = allocMain_add(D.tiles.fxLightCircle, x,y);
 		p.setFadeS(rnd(0.1,0.2), 0, R.around(0.7));
 		p.setScale(scale);
@@ -140,11 +140,55 @@ class Fx extends GameProcess {
 		p.setFadeS(R.around(0.6), 0.1, 0.4);
 		p.colorize(c);
 		p.scaleX = rnd(0.3,0.6);
+		p.scaleY = rnd(1,2);
 		p.moveAng(ang, rnd(1,2));
 		p.rotation = ang;
 		p.frict = 0.9;
 		p.alphaFlicker = 0.7;
 		p.lifeS = R.around(0.5);
+	}
+
+
+	public function shoot(x:Float, y:Float, ang:Float, c:Col) {
+		for(i in 0...10) {
+			var p = allocMain_add( D.tiles.fxImpact, x,y);
+			p.setFadeS(R.around(0.6), 0, 0.15);
+			p.setCenterRatio(1, 0.5);
+			p.rotation = ang + M.A180;
+			p.scaleX = rnd(1.5,2);
+			p.scaleY = rnd(0.5, 1.1, true);
+			p.scaleXMul = rnd(1, 1.02);
+			p.scaleYMul = rnd(0.97, 0.99);
+			p.colorize(c);
+			p.lifeS = R.around(0.1);
+		}
+
+		for(i in 0...20) {
+			var p = allocMain_add(D.tiles.pixel, x, y);
+			p.moveAng(ang+rnd(0, 0.06, true), rnd(3,5));
+			p.frict = R.aroundBO(0.9,7);
+			p.colorize(c);
+			p.lifeS = rnd(0.1, 0.4);
+		}
+	}
+
+
+	public function explosion(x:Float, y:Float, c:Col) {
+		var n = 20;
+		for(i in 0...n) {
+			var a = M.A360 * i/n + rnd(0,0.2,true);
+			var p = allocMain_add( D.tiles.fxImpact, x, y);
+			p.setFadeS(rnd(0.4,0.6), 0, 0.1);
+			p.setCenterRatio(1,0.5);
+			p.colorize(c);
+			p.rotation = a;
+			p.scaleX = rnd(0.5, 0.7);
+			p.scaleY = rnd(0.5,1,true);
+			p.dsX = rnd(0.1,0.2);
+			p.dsFrict = R.aroundBO(0.92);
+			p.scaleYMul = rnd(0.96, 0.98);
+			p.lifeS = rnd(0.1,0.2);
+		}
 	}
 
 

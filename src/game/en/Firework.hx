@@ -12,12 +12,16 @@ class Firework extends Entity {
 	}
 
 	public function fromBottom(x:Float, y:Float) {
+		fx.halo(x,y, rnd(0.1,0.2), color, 0.4);
+
 		setPosPixel(x+rnd(20,60,true), game.h()/Const.SCALE);
 		target = LPoint.fromPixels(x,y);
 		var a = Math.atan2(target.levelY-attachY, target.levelX-attachX);
 		dx = Math.cos(a)*0.1;
 		dy = Math.sin(a)*0.1;
 		dy -= rnd(0.1,0.2);
+
+		fx.shoot(attachX, attachY+8, Math.atan2(dy,dx), color);
 	}
 
 	override function postUpdate() {
@@ -39,6 +43,7 @@ class Firework extends Entity {
 		if( distPx(target.levelX, target.levelY)<=20 ) {
 			destroy();
 			fx.halo(attachX, attachY, 1, color);
+			fx.explosion(attachX, attachY, color);
 			fx.sparksBall(attachX, attachY, rnd(90,100), color);
 		}
 	}
