@@ -221,41 +221,20 @@ class App extends dn.Process {
 		controller = dn.heaps.input.Controller.createFromAbstractEnum(GameAction);
 
 		// Gamepad bindings
-		controller.bindPadLStick4(MoveLeft, MoveRight, MoveUp, MoveDown);
-		controller.bindPad(Jump, A);
 		controller.bindPad(Restart, SELECT);
-		controller.bindPad(Pause, START);
-		controller.bindPad(MoveLeft, DPAD_LEFT);
-		controller.bindPad(MoveRight, DPAD_RIGHT);
-		controller.bindPad(MoveUp, DPAD_UP);
-		controller.bindPad(MoveDown, DPAD_DOWN);
 		controller.bindPad(MenuCancel, B);
 
 		// Keyboard bindings
-		controller.bindKeyboard(MoveLeft, [K.LEFT, K.Q, K.A]);
-		controller.bindKeyboard(MoveRight, [K.RIGHT, K.D]);
-		controller.bindKeyboard(MoveUp, [K.UP, K.Z, K.W]);
-		controller.bindKeyboard(MoveDown, [K.DOWN, K.S]);
-		controller.bindKeyboard(Jump, K.SPACE);
-		controller.bindKeyboard(Restart, K.R);
+		controller.bindKeyboardCombo(Restart, [K.R, K.SHIFT]);
 		controller.bindKeyboard(ScreenshotMode, K.F9);
-		controller.bindKeyboard(Pause, K.P);
-		controller.bindKeyboard(Pause, K.PAUSE_BREAK);
 		controller.bindKeyboard(MenuCancel, K.ESCAPE);
 
 		// Debug controls
 		#if debug
 		controller.bindPad(DebugTurbo, LT);
 		controller.bindPad(DebugSlowMo, LB);
-		controller.bindPad(DebugDroneZoomIn, RSTICK_UP);
-		controller.bindPad(DebugDroneZoomOut, RSTICK_DOWN);
-
-		controller.bindKeyboard(DebugDroneZoomIn, K.PGUP);
-		controller.bindKeyboard(DebugDroneZoomOut, K.PGDOWN);
 		controller.bindKeyboard(DebugTurbo, [K.END, K.NUMPAD_ADD]);
 		controller.bindKeyboard(DebugSlowMo, [K.HOME, K.NUMPAD_SUB]);
-		controller.bindPadCombo(ToggleDebugDrone, [LSTICK_PUSH, RSTICK_PUSH]);
-		controller.bindKeyboardCombo(ToggleDebugDrone, [K.D, K.CTRL, K.SHIFT]);
 		#end
 
 		ca = controller.createAccess();
@@ -294,9 +273,6 @@ class App extends dn.Process {
 
 		if( ca.isPressed(ScreenshotMode) )
 			setScreenshotMode( !screenshotMode );
-
-		if( ca.isPressed(Pause) )
-			toggleGamePause();
 
 		if( isGamePaused() && ca.isPressed(MenuCancel) )
 			setGamePause(false);

@@ -123,9 +123,9 @@ class Fx extends GameProcess {
 	}
 
 
-	public inline function halo(x:Float, y:Float, scale:Float, c:Col, alpha=1.0) {
+	public inline function halo(x:Float, y:Float, scale:Float, c:Col, alpha=0.2) {
 		var p = allocMain_add(D.tiles.fxLightCircle, x,y);
-		p.setFadeS(rnd(0.1,0.2), 0, R.around(0.7));
+		p.setFadeS(R.aroundBO(alpha), 0, R.around(0.7));
 		p.setScale(scale);
 		p.colorAnimS(c, "#3656dd", 1);
 		p.ds = 0.1;
@@ -233,14 +233,15 @@ class Fx extends GameProcess {
 	public function paintLine(fx:Float, fy:Float, tx:Float, ty:Float, c:Col) {
 		var d = M.dist(fx,fy, tx,ty);
 		var a = M.angTo(fx,fy, tx,ty);
-		var n = M.ceil(d/4);
+		var n = M.ceil(d/3);
 		var step = d/n;
 		for(i in 0...n) {
 			var p = allocMain_add(D.tiles.fxLine, fx+Math.cos(a)*i*step + rnd(0,1,true), fy+Math.sin(a)*i*step + rnd(0,1,true));
+			p.setCenterRatio(0.1,0.5);
 			p.setFadeS( rnd(0.4,1), 0.1, R.around(1));
 			p.gy = rnd(0, 0.0015);
 			p.alphaFlicker = 0.2;
-			p.scaleX = 0.2 + R.around(1) * step/p.t.width;
+			p.scaleX = 0.1 + R.around(1) * step/p.t.width;
 			p.rotation = a;
 			p.colorize(c);
 			p.frict = R.aroundBO(0.92,4);

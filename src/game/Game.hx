@@ -105,6 +105,8 @@ class Game extends dn.Process {
 
 		bgWrapper = new h2d.Object(scroller);
 
+		en.PendingLetter.createOne();
+
 		hud.onLevelStart();
 		dn.Process.resizeAll();
 		dn.Gc.runNow();
