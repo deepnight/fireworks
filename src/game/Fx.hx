@@ -230,6 +230,33 @@ class Fx extends GameProcess {
 	}
 
 
+	public function paintLine(fx:Float, fy:Float, tx:Float, ty:Float, c:Col) {
+		var d = M.dist(fx,fy, tx,ty);
+		var a = M.angTo(fx,fy, tx,ty);
+		var n = M.ceil(d/4);
+		var step = d/n;
+		for(i in 0...n) {
+			var p = allocMain_add(D.tiles.fxLine, fx+Math.cos(a)*i*step + rnd(0,1,true), fy+Math.sin(a)*i*step + rnd(0,1,true));
+			p.setFadeS( rnd(0.4,1), 0.1, R.around(1));
+			p.gy = rnd(0, 0.0015);
+			p.alphaFlicker = 0.2;
+			p.scaleX = 0.2 + R.around(1) * step/p.t.width;
+			p.rotation = a;
+			p.colorize(c);
+			p.frict = R.aroundBO(0.92,4);
+			p.lifeS = rnd(2,3);
+
+			var p = allocMain_add(D.tiles.pixel, fx+Math.cos(a)*i*step + rnd(0,2,true), fy+Math.sin(a)*i*step + rnd(0,2,true));
+			p.setFadeS( rnd(0.6,0.8), 0.1, R.around(1));
+			p.gy = rnd(0, 0.003);
+			p.alphaFlicker = 0.4;
+			p.colorize(c);
+			p.frict = R.aroundBO(0.92,4);
+			p.lifeS = rnd(2,3);
+		}
+	}
+
+
 	/**
 		A small sample to demonstrate how basic particles work. This example produces a small explosion of yellow dots that will fall and slowly fade to purple.
 

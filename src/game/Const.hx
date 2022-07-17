@@ -77,6 +77,6 @@ class Const {
 	public static var db = ConstDbBuilder.buildVar(["data.cdb", "const.json"]);
 
 
-	public static var COLOR_BG = Col.inlineHex("#25294d");
+	public static var COLOR_BG : Col = Col.inlineHex("#25294d");
 #end
 }

@@ -24,6 +24,7 @@ class Game extends dn.Process {
 	public var hei(get,never) : Int;  inline function get_hei() return M.ceil( h()/Const.SCALE );
 
 	var bgWrapper : h2d.Object;
+	var lastClick : Null<LPoint>;
 
 	public function new() {
 		super(App.ME);
@@ -48,19 +49,40 @@ class Game extends dn.Process {
 		inter.onRelease = onMouseUp;
 		inter.onReleaseOutside = onMouseUp;
 		inter.onOut = onMouseUp;
+		inter.onMove = onMouseMove;
 
 		start();
 	}
 
 
 	function onMouseDown(ev:hxd.Event) {
-		var pt = LPoint.fromScreen( ev.relX, ev.relY );
-		var f = new en.Firework();
-		f.fromBottom(pt.levelX, pt.levelY);
+		lastClick = LPoint.fromScreen( ev.relX, ev.relY );
 	}
 
 
 	function onMouseUp(ev:hxd.Event) {
+		if( lastClick!=null ) {
+			var f = new en.Firework();
+			f.fromBottom(lastClick.levelX, lastClick.levelY);
+			lastClick = null;
+		}
+	}
+
+
+
+	function onMouseMove(ev:hxd.Event) {
+		if( lastClick==null )
+			return;
+
+		var cur = LPoint.fromScreen(ev.relX, ev.relY);
+		if( lastClick!=null && lastClick.distPx(cur)>=8 ) {
+			fx.paintLine(
+				lastClick.levelX, lastClick.levelY,
+				cur.levelX, cur.levelY,
+				Const.COLOR_BG.toWhite(0.4)
+			);
+			lastClick = cur;
+		}
 	}
 
 
