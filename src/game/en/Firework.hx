@@ -21,6 +21,7 @@ class Firework extends Entity {
 		dy = Math.sin(a)*0.1;
 		dy -= rnd(0.1,0.2);
 
+		fx.halo(attachX, attachY, rnd(0.1,0.2), color, 0.2);
 		fx.shoot(attachX, attachY+8, Math.atan2(dy,dx), color);
 	}
 

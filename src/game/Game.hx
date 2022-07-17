@@ -20,6 +20,11 @@ class Game extends dn.Process {
 	var inter : h2d.Interactive;
 	var bg : h2d.Bitmap;
 
+	public var wid(get,never) : Int;  inline function get_wid() return M.ceil( w()/Const.SCALE );
+	public var hei(get,never) : Int;  inline function get_hei() return M.ceil( h()/Const.SCALE );
+
+	var bgWrapper : h2d.Object;
+
 	public function new() {
 		super(App.ME);
 
@@ -33,7 +38,7 @@ class Game extends dn.Process {
 		root.add(scroller, Const.DP_BG);
 		scroller.filter = new h2d.filter.Nothing(); // force rendering for pixel perfect
 
-		bg = new h2d.Bitmap( h2d.Tile.fromColor(Col.inlineHex("#25294d")), scroller );
+		bg = new h2d.Bitmap( h2d.Tile.fromColor(Const.COLOR_BG), scroller );
 		fx = new Fx();
 		hud = new ui.Hud();
 
@@ -76,9 +81,44 @@ class Game extends dn.Process {
 			e.destroy();
 		garbageCollectEntities();
 
+		bgWrapper = new h2d.Object(scroller);
+
 		hud.onLevelStart();
 		dn.Process.resizeAll();
 		dn.Gc.runNow();
+	}
+
+
+	function renderBg() {
+		bgWrapper.removeChildren();
+
+		// Stars
+		var sb = new HSpriteBatch(Assets.tiles.tile, scroller);
+		sb.hasRotationScale = true;
+		sb.blendMode = Add;
+		for(i in 0...400) {
+			var be = Assets.tiles.hbe_getRandom(sb, D.tiles.pixel);
+			be.colorize(Const.COLOR_BG);
+			be.x = rnd(0,wid);
+			be.y = rnd(0,hei-30);
+			be.alpha = (1-be.y/hei) - rnd(0,0.5);
+		}
+
+		// Trees
+		var sb = new HSpriteBatch(Assets.tiles.tile, scroller);
+		sb.hasRotationScale = true;
+		var x = irnd(0,10);
+		while( x<wid ) {
+			var be = Assets.tiles.hbe_getRandom(sb, D.tiles.tree);
+			be.setCenterRatio();
+			be.scaleX = rnd(0.9,1.1,true);
+			be.scaleY = rnd(0.8,1.1);
+			be.rotation = rnd(0,0.1,true);
+			be.colorize(0x0);
+			be.x = x;
+			be.y = hei + irnd(-6,3);
+			x += irnd(8,12);
+		}
 	}
 
 
@@ -101,6 +141,8 @@ class Game extends dn.Process {
 		bg.scaleY = M.ceil( h()/Const.SCALE );
 
 		scroller.setScale(Const.SCALE);
+
+		renderBg();
 	}
 
 

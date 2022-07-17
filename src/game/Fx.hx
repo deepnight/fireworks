@@ -218,7 +218,7 @@ class Fx extends GameProcess {
 			var a = R.fullCircle();
 			var dr = rnd(0.15, 0.8);
 			var p = allocMain_add(D.tiles.pixel, x+Math.cos(a)*dr*radius, y+Math.sin(a)*dr*radius);
-			p.setFadeS(rnd(0.9, 1), 0, R.around(0.3));
+			p.setFadeS(rnd(0.5, 0.7), 0, R.around(0.3));
 			p.colorAnimS(c, "#810c0c", rnd(0.5,2));
 			p.alphaFlicker = 0.7;
 			p.moveAwayFrom( x, y, R.around(0.3, 15) * (0.5+0.5*dr) * (1*radius/100) );
