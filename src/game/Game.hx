@@ -110,7 +110,8 @@ class Game extends dn.Process {
 			e.destroy();
 		garbageCollectEntities();
 
-		bgWrapper = new h2d.Object(scroller);
+		bgWrapper = new h2d.Object();
+		scroller.add(bgWrapper, Const.DP_BG);
 
 		hud.onLevelStart();
 		dn.Process.resizeAll();
@@ -121,16 +122,27 @@ class Game extends dn.Process {
 	function renderBg() {
 		bgWrapper.removeChildren();
 
+		// Dark gradient
+		var gradient = Assets.tiles.h_get(D.tiles.gradient, bgWrapper);
+		gradient.scaleX = wid / gradient.tile.width;
+		gradient.scaleY = hei / gradient.tile.height;
+		gradient.blendMode = Multiply;
+		gradient.alpha = 0.6;
+
 		// Stars
 		var sb = new HSpriteBatch(Assets.tiles.tile, scroller);
 		sb.hasRotationScale = true;
 		sb.blendMode = Add;
+		var c = Const.COLOR_BG.clone();
+		c.saturation*=0.7;
+		c.lightness = 0.8;
 		for(i in 0...700) {
 			var be = Assets.tiles.hbe_getRandom(sb, D.tiles.pixel);
-			be.colorize(Const.COLOR_BG);
+			be.colorize(c);
+			be.scaleX = be.scaleY = irnd(1,2);
 			be.x = rnd(0,wid);
 			be.y = rnd(0,hei-30);
-			be.alpha = 0.3 + 0.7 * (1-be.y/hei) * rnd(0.3,1);
+			be.alpha = 0.1 + 0.9 * (1-be.y/hei) * rnd(0.3,1);
 		}
 
 		// Trees
