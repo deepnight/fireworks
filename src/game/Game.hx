@@ -50,6 +50,7 @@ class Game extends dn.Process {
 		inter.onReleaseOutside = onMouseUp;
 		inter.onOut = onMouseUp;
 		inter.onMove = onMouseMove;
+		inter.onKeyDown = onKeyDown;
 
 		start();
 	}
@@ -68,6 +69,12 @@ class Game extends dn.Process {
 		}
 	}
 
+	function onKeyDown(ev:hxd.Event) {
+		if( !ca.isKeyboardDown(K.SHIFT) && !ca.isKeyboardDown(K.CTRL) && !ca.isKeyboardDown(K.ALT) && ev.keyCode>=K.A && ev.keyCode<=K.Z )
+			onLetterPress( ev.keyCode-K.A );
+	}
+
+	function onLetterPress(letterIdx:Int) {}
 
 
 	function onMouseMove(ev:hxd.Event) {
@@ -104,8 +111,6 @@ class Game extends dn.Process {
 		garbageCollectEntities();
 
 		bgWrapper = new h2d.Object(scroller);
-
-		en.PendingLetter.createOne();
 
 		hud.onLevelStart();
 		dn.Process.resizeAll();

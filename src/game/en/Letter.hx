@@ -1,12 +1,12 @@
 package en;
 
-class PendingLetter extends Entity {
-	public static var ALL : FixedArray<PendingLetter> = new FixedArray(50);
+class Letter extends Entity {
+	public static var ALL : FixedArray<Letter> = new FixedArray(50);
 
 	var tf : h2d.Text;
 	public var letterIdx : Int;
+	public var done = false;
 	var color : Col;
-	var done = false;
 	var ds = 0.;
 
 	public function new(letterIdx:Int) {
@@ -32,8 +32,24 @@ class PendingLetter extends Entity {
 		ALL.remove(this);
 	}
 
-	public static function createOne() : PendingLetter {
-		var l = new PendingLetter( R.irnd(0,25) );
+	public static inline function count() {
+		var n = 0;
+		for( e in ALL )
+			if( !e.destroyed )
+				n++;
+		return n;
+	}
+
+	public static function get(letterIdx) : Null<Letter> {
+		for(e in ALL)
+			if( !e.destroyed && !e.done && e.letterIdx==letterIdx )
+				return e;
+		return null;
+	}
+
+
+	public static function createOne() : Letter {
+		var l = new Letter( R.irnd(0,25) );
 
 		// Try to find an empy screen location
 		var limit = 50;
@@ -53,12 +69,36 @@ class PendingLetter extends Entity {
 		return l;
 	}
 
+	public function validate() {
+		done = true;
+		cd.setS("keep",0.3);
+
+		ds = 0.03;
+		sprScaleX += 0.1;
+		sprScaleY += 0.1;
+
+		tf.textColor = White;
+
+		fx.halo(attachX, attachY, 0.7, color, 0.4);
+		fx.explosion(attachX, attachY, color);
+		fx.sparksBall(attachX, attachY, 100, color);
+
+		var n = 4;
+		for(i in 0...8)
+			game.delayer.addS(
+				fx.sparksBall.bind(attachX+rnd(20,40,true), attachY+rnd(20,40,true), rnd(60,80), color),
+				0.1 + 0.7*i/n + rnd(0,0.05,true)
+			);
+	}
+
 	override function postUpdate() {
 		super.postUpdate();
 
+		// Float around
 		spr.x += Math.cos(ftime*0.027)*4;
 		spr.y += Math.sin(ftime*0.031)*3;
 
+		// Alpha anims
 		if( !done )
 			spr.alpha = ( 0.7 + 0.3*Math.sin(ftime*0.012) ) * (1-cd.getRatio("fadeIn"));
 		else
@@ -69,27 +109,13 @@ class PendingLetter extends Entity {
 		sprScaleY+=ds*tmod;
 		ds*=Math.pow(0.9,tmod);
 
-		// Key pressed!
-		if( !done && game.ca.isKeyboardPressed(K.A + letterIdx) ) {
-			done = true;
-			ds = 0.03;
-			sprScaleX += 0.1;
-			sprScaleY += 0.1;
-			cd.setS("keep",0.3);
-			tf.textColor = White;
-			fx.halo(attachX, attachY, 0.7, color, 0.4);
-			fx.explosion(attachX, attachY, color);
-			fx.sparksBall(attachX, attachY, 100, color);
-			var n = 4;
-			for(i in 0...8)
-				game.delayer.addS(
-					fx.sparksBall.bind(attachX+rnd(20,40,true), attachY+rnd(20,40,true), rnd(60,80), color),
-					0.1 + 0.7*i/n + rnd(0,0.05,true)
-				);
+	}
 
-			createOne();
-		}
 
+	override function fixedUpdate() {
+		super.fixedUpdate();
+
+		// Kill
 		if( done && !cd.has("keep") )
 			destroy();
 	}
