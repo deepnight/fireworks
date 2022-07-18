@@ -1,7 +1,9 @@
 package g;
 
-class SingleLetter extends Game {
+class RandomTyping extends Game {
 	var maxLetters = 1;
+	var curSubScore = 0;
+	var score = 0;
 
 	public function new() {
 		super();
@@ -15,6 +17,12 @@ class SingleLetter extends Game {
 			return;
 
 		e.validate();
+		score++;
+		curSubScore++;
+		if( curSubScore>=maxLetters*10 ) {
+			curSubScore = 0;
+			maxLetters++;
+		}
 	}
 
 	override function fixedUpdate() {
