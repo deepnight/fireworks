@@ -194,7 +194,7 @@ class Fx extends GameProcess {
 
 	public inline function sparksBall(x:Float, y:Float, radius:Float, c:Col) {
 		// Lines
-		var n = M.ceil( 90*radius/30 );
+		var n = M.ceil( 60*radius/30 );
 		for(i in 0...n) {
 			var a = R.fullCircle();
 			var dr = rnd(0, 0.3);
@@ -213,7 +213,7 @@ class Fx extends GameProcess {
 		}
 
 		// Dots
-		var n = M.ceil( 90*radius/30 );
+		var n = M.ceil( 50*radius/30 );
 		for(i in 0...n) {
 			var a = R.fullCircle();
 			var dr = rnd(0.15, 0.8);

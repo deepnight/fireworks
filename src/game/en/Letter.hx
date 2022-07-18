@@ -9,6 +9,7 @@ class Letter extends Entity {
 	public var done = false;
 	var color : Col;
 	var ds = 0.;
+	var floatOff = R.fullCircle();
 
 	public function new(letterIdx:Int) {
 		super(0,0);
@@ -19,6 +20,7 @@ class Letter extends Entity {
 
 		spr.set(D.tiles.empty);
 		color = Col.randomHSL(R.zto(), R.around(0.7,20), 1);
+		spr.rotation = rnd(0,0.2,true);
 
 		tf = new h2d.Text(Assets.fontLarge, spr);
 		tf.text = String.fromCharCode( "A".code + letterIdx );
@@ -26,6 +28,7 @@ class Letter extends Entity {
 		tf.y = Std.int( -tf.textHeight*0.5);
 		tf.blendMode = Add;
 		tf.textColor = color;
+		tf.smooth = true;
 
 		cd.setS("fadeIn", 1);
 	}
@@ -50,7 +53,7 @@ class Letter extends Entity {
 		return null;
 	}
 
-	public static function createOne() : Letter {
+	public static function createOneRandom() : Letter {
 		// Try to pick a non-recent letter
 		var lidx = R.irnd(0,25);
 		var limit = 100;
@@ -92,11 +95,11 @@ class Letter extends Entity {
 		fx.explosion(attachX, attachY, color);
 		fx.sparksBall(attachX, attachY, 100, color);
 
-		var n = 4;
-		for(i in 0...8)
+		var n = 5;
+		for(i in 0...n)
 			game.delayer.addS(
 				fx.sparksBall.bind(attachX+rnd(20,40,true), attachY+rnd(20,40,true), rnd(60,80), color),
-				0.1 + 0.7*i/n + rnd(0,0.05,true)
+				0.1 + 0.6*i/n + rnd(0,0.05,true)
 			);
 	}
 
@@ -104,8 +107,8 @@ class Letter extends Entity {
 		super.postUpdate();
 
 		// Float around
-		spr.x += Math.cos(ftime*0.027)*4;
-		spr.y += Math.sin(ftime*0.031)*3;
+		spr.x += Math.cos(ftime*0.027+floatOff)*4;
+		spr.y += Math.sin(ftime*0.031+floatOff)*3;
 
 		// Alpha anims
 		if( !done )

@@ -117,7 +117,7 @@ class App extends dn.Process {
 	}
 
 	final function _createGameInstance() {
-		new g.RandomTyping();
+		new g.Words();
 	}
 
 

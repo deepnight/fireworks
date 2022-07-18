@@ -125,28 +125,29 @@ class Game extends dn.Process {
 		var sb = new HSpriteBatch(Assets.tiles.tile, scroller);
 		sb.hasRotationScale = true;
 		sb.blendMode = Add;
-		for(i in 0...400) {
+		for(i in 0...700) {
 			var be = Assets.tiles.hbe_getRandom(sb, D.tiles.pixel);
 			be.colorize(Const.COLOR_BG);
 			be.x = rnd(0,wid);
 			be.y = rnd(0,hei-30);
-			be.alpha = (1-be.y/hei) - rnd(0,0.5);
+			be.alpha = 0.3 + 0.7 * (1-be.y/hei) * rnd(0.3,1);
 		}
 
 		// Trees
 		var sb = new HSpriteBatch(Assets.tiles.tile, scroller);
 		sb.hasRotationScale = true;
 		var x = irnd(0,10);
+		var s = 2;
 		while( x<wid ) {
 			var be = Assets.tiles.hbe_getRandom(sb, D.tiles.tree);
 			be.setCenterRatio();
-			be.scaleX = rnd(0.9,1.1,true);
-			be.scaleY = rnd(0.8,1.1);
+			be.scaleX = s * rnd(0.9,1.1,true);
+			be.scaleY = s * rnd(0.8,1.1);
 			be.rotation = rnd(0,0.1,true);
 			be.colorize(0x0);
 			be.x = x;
 			be.y = hei + irnd(-6,3);
-			x += irnd(8,12);
+			x += irnd(6,10)*s;
 		}
 	}
 

@@ -29,6 +29,6 @@ class RandomTyping extends Game {
 		super.fixedUpdate();
 
 		if( Letter.count()<maxLetters )
-			Letter.createOne();
+			Letter.createOneRandom();
 	}
 }
