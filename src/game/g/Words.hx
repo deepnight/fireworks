@@ -1,7 +1,9 @@
 package g;
 
 class Words extends Game {
+	static var WORD_COOLDOWN_S = 15;
 	var curWord : String;
+	var recentWords : Map<String,Float> = new Map();
 
 	public function new() {
 		super();
@@ -14,10 +16,10 @@ class Words extends Game {
 			e.destroy();
 
 		curWord = w.toUpperCase();
-		var lwid = 50;
+		var lwid = 65;
 		var i = 0;
-		var offX = rnd(0,100,true);
-		var offY = rnd(0,100,true);
+		var offX = rnd(0,80,true);
+		var offY = rnd(0,80,true);
 		for( c in curWord.split("") ) {
 			var l = new Letter(c.charCodeAt(0) - "A".code);
 			l.setPosPixel(
@@ -29,7 +31,11 @@ class Words extends Game {
 	}
 
 	function pickWord() {
-		setWord("gabriel");
+		var w = R.pick(Assets.words);
+		var limit = 100;
+		while( recentWords.exists(w) && haxe.Timer.stamp()-recentWords.get(w)<=WORD_COOLDOWN_S && limit-->0 )
+			w = R.pick(Assets.words);
+		setWord(w);
 	}
 
 	override function onLetterPress(letterIdx:Int) {
@@ -40,8 +46,28 @@ class Words extends Game {
 			return;
 
 		e.validate();
-		cd.setS("nextLock", 2);
+		cd.setS("nextLock", 3);
+
+		// Word complete
+		if( Letter.count()==0 ) {
+			recentWords.set( curWord, haxe.Timer.stamp() );
+			// Victory fireworks
+			var n = 12;
+			for(i in 0...n) {
+				delayer.addS( ()->{
+					var f = new Firework();
+					f.fromBottom(
+						rnd(100, wid-100),
+						hei - rnd(100,200)
+					);
+					},
+					0.8*i/n + rnd(0,0.1,true)
+				);
+			}
+		}
 	}
+
+
 
 	override function fixedUpdate() {
 		super.fixedUpdate();

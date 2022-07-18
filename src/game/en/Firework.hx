@@ -43,7 +43,7 @@ class Firework extends Entity {
 		// Reached target
 		if( distPx(target.levelX, target.levelY)<=20 ) {
 			destroy();
-			fx.halo(attachX, attachY, 1, color, 0.4);
+			fx.halo(attachX, attachY, 1, color, 0.25);
 			fx.explosion(attachX, attachY, color);
 			fx.sparksBall(attachX, attachY, rnd(90,100), color);
 		}

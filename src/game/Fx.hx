@@ -192,6 +192,59 @@ class Fx extends GameProcess {
 	}
 
 
+	public function letterValidated(x:Float, y:Float, c:Col) {
+		// Sparks
+		var n = 150;
+		for(i in 0...n) {
+			var p = allocMain_add( D.tiles.pixel, x+rnd(1,20,true), y+rnd(1,20,true));
+			p.colorize(c);
+			p.setFadeS(rnd(0.8,1), 0, R.around(0.2));
+			p.scale = 2;
+			p.moveAwayFrom(x,y, rnd(1,3));
+			p.frict = R.aroundBO(0.87);
+			// p.alphaFlicker = 0.5;
+			p.lifeS = R.around(0.4);
+		}
+	}
+
+	public function letterExplosion(x:Float, y:Float, c:Col) {
+		// Core
+		var n = 15;
+		for(i in 0...n) {
+			var a = M.A360 * i/n + rnd(0,0.2,true);
+			var p = allocMain_add( D.tiles.fxImpact, x, y);
+			p.setFadeS(rnd(0.4,0.6), 0, 0.1);
+			p.setCenterRatio(1,0.5);
+			p.colorize(c);
+			p.rotation = a;
+			p.dr = rnd(0,0.1,true);
+			p.scaleX = rnd(1, 1.5);
+			p.scaleY = rnd(0.5,1,true);
+			p.dsX = rnd(0.1,0.2);
+			p.dsFrict = R.aroundBO(0.92);
+			p.scaleYMul = rnd(0.96, 0.98);
+			p.lifeS = rnd(0.1,0.2);
+		}
+
+		// Lines
+		n = 30;
+		for(i in 0...n) {
+			var p = allocMain_add( D.tiles.fxLine, x+rnd(1,4,true), y+rnd(1,4,true));
+			p.setFadeS(rnd(0.4,0.6), 0, 0.1);
+			p.setCenterRatio(1,0.5);
+			p.colorize(c);
+			p.moveAwayFrom(x,y, R.around(5));
+			p.rotation = p.getMoveAng();
+			p.frict = R.aroundBO(0.87);
+			p.scaleX = rnd(0.5, 1);
+			p.dsX = rnd(0.1,0.2);
+			p.dsFrict = R.aroundBO(0.85);
+			p.scaleXMul = R.around(0.8);
+			p.lifeS = R.around(0.3);
+		}
+	}
+
+
 	public inline function sparksBall(x:Float, y:Float, radius:Float, c:Col) {
 		// Lines
 		var n = M.ceil( 60*radius/30 );

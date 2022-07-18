@@ -19,7 +19,7 @@ class Letter extends Entity {
 		recents.set(letterIdx, haxe.Timer.stamp());
 
 		spr.set(D.tiles.empty);
-		color = Col.randomHSL(R.zto(), R.around(0.7,20), 1);
+		color = Col.randomHSL(R.zto(), 1-rnd(0,0.2), 1);
 		spr.rotation = rnd(0,0.2,true);
 
 		tf = new h2d.Text(Assets.fontLarge, spr);
@@ -41,7 +41,7 @@ class Letter extends Entity {
 	public static inline function count() {
 		var n = 0;
 		for( e in ALL )
-			if( !e.destroyed )
+			if( !e.destroyed && !e.done )
 				n++;
 		return n;
 	}
@@ -83,7 +83,7 @@ class Letter extends Entity {
 
 	public function validate() {
 		done = true;
-		cd.setS("keep",0.3);
+		// cd.setS("keep",0.3);
 
 		ds = 0.03;
 		sprScaleX += 0.1;
@@ -91,14 +91,17 @@ class Letter extends Entity {
 
 		tf.textColor = White;
 
-		fx.halo(attachX, attachY, 0.7, color, 0.4);
-		fx.explosion(attachX, attachY, color);
-		fx.sparksBall(attachX, attachY, 100, color);
+		fx.letterValidated(attachX, attachY, color);
+		fx.letterExplosion(attachX, attachY, color);
+		// fx.halo(attachX, attachY, 0.7, color, 0.4);
+		// fx.explosion(attachX, attachY, color);
+		// fx.sparksBall(attachX, attachY, 100, color);
 
-		var n = 5;
+		var n = 10;
 		for(i in 0...n)
 			game.delayer.addS(
-				fx.sparksBall.bind(attachX+rnd(20,40,true), attachY+rnd(20,40,true), rnd(60,80), color),
+				fx.letterExplosion.bind(attachX+rnd(5,30,true), attachY+rnd(5,30,true), color),
+				// fx.sparksBall.bind(attachX+rnd(20,40,true), attachY+rnd(20,40,true), rnd(60,80), color),
 				0.1 + 0.6*i/n + rnd(0,0.05,true)
 			);
 	}
