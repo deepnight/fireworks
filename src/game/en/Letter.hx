@@ -2,6 +2,7 @@ package en;
 
 class Letter extends Entity {
 	public static var ALL : FixedArray<Letter> = new FixedArray(50);
+	static var recents : Map<Int, Float> = new Map();
 
 	var tf : h2d.Text;
 	public var letterIdx : Int;
@@ -14,6 +15,8 @@ class Letter extends Entity {
 		ALL.push(this);
 
 		this.letterIdx = letterIdx;
+		recents.set(letterIdx, haxe.Timer.stamp());
+
 		spr.set(D.tiles.empty);
 		color = Col.randomHSL(R.zto(), R.around(0.7,20), 1);
 
@@ -47,9 +50,15 @@ class Letter extends Entity {
 		return null;
 	}
 
-
 	public static function createOne() : Letter {
-		var l = new Letter( R.irnd(0,25) );
+		// Try to pick a non-recent letter
+		var lidx = R.irnd(0,25);
+		var limit = 100;
+		while( recents.exists(lidx) && haxe.Timer.stamp()-recents.get(lidx)<=5 && limit-->0 )
+			lidx = R.irnd(0,25);
+
+
+		var l = new Letter(lidx);
 
 		// Try to find an empy screen location
 		var limit = 50;
