@@ -15,6 +15,7 @@ class Assets {
 	public static var tiles : SpriteLib;
 
 	public static var words : Array<String>;
+	public static var wordPicker : RandDeck<String>;
 
 	static var _initDone = false;
 	public static function init() {
@@ -50,6 +51,11 @@ class Assets {
 		}
 		trace(words);
 
+		// Init word picker
+		wordPicker = new RandDeck();
+		for(w in words)
+			wordPicker.push(w);
+		wordPicker.shuffle();
 
 		// build sprite atlas directly from Aseprite file
 		tiles = dn.heaps.assets.Aseprite.convertToSLib(Const.FPS, hxd.Res.atlas.tiles.toAseprite());

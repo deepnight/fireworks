@@ -1,8 +1,15 @@
 Pomme
 Orange
 Citron
+Cerise
+Raisin
+Tomate
+
 Chat
 Chien
+Souris
+Lapin
+
 Avion
 Tracteur
 Bateau

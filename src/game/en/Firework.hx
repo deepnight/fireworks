@@ -6,13 +6,14 @@ class Firework extends Entity {
 
 	public function new() {
 		super(0,0);
-		color = Col.randomHSL(rnd(0,1), rnd(0.3,0.7), 1);
+		color = Col.randomHSL(rnd(0,1), rnd(0.7,1), 1);
 		frict = R.around(0.95, 3);
 		spr.set(D.tiles.empty);
 	}
 
-	public function fromBottom(x:Float, y:Float) {
-		fx.halo(x,y, rnd(0.1,0.2), color, 0.06);
+	public function fromBottom(x:Float, y:Float, announce=true) {
+		if( announce )
+			fx.halo(x,y, rnd(0.1,0.2), color, 0.06);
 
 		setPosPixel(x+rnd(20,60,true), game.h()/Const.SCALE);
 		target = LPoint.fromPixels(x,y);

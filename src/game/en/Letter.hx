@@ -11,7 +11,7 @@ class Letter extends Entity {
 	var ds = 0.;
 	var floatOff = R.fullCircle();
 
-	public function new(letterIdx:Int) {
+	public function new(letterIdx:Int, ?customColor:Col) {
 		super(0,0);
 		ALL.push(this);
 
@@ -19,7 +19,7 @@ class Letter extends Entity {
 		recents.set(letterIdx, haxe.Timer.stamp());
 
 		spr.set(D.tiles.empty);
-		color = Col.randomHSL(R.zto(), 1-rnd(0,0.2), 1);
+		color = customColor==null ? Col.randomHSL(R.zto(), 1-rnd(0,0.2), 1) : customColor;
 		spr.rotation = rnd(0,0.2,true);
 
 		tf = new h2d.Text(Assets.fontLarge, spr);
@@ -27,7 +27,9 @@ class Letter extends Entity {
 		tf.x = Std.int( -tf.textWidth*0.5);
 		tf.y = Std.int( -tf.textHeight*0.5);
 		tf.blendMode = Add;
-		tf.textColor = color;
+		var c = new Col(color);
+		c.saturation*=0.66;
+		tf.textColor = c;
 		tf.smooth = true;
 
 		cd.setS("fadeIn", 1);
@@ -51,6 +53,15 @@ class Letter extends Entity {
 			if( !e.destroyed && !e.done && e.letterIdx==letterIdx )
 				return e;
 		return null;
+	}
+
+	public static function getFirstLeft(letterIdx:Int) : Null<Letter> {
+		return dn.DecisionHelper.optimizedPick( ALL, (e)->{
+			if( e.done || e.destroyed || e.letterIdx!=letterIdx )
+				return -999999;
+			else
+				return -e.attachX;
+		}, -999999);
 	}
 
 	public static function createOneRandom() : Letter {
