@@ -31,6 +31,7 @@ class Letter extends Entity {
 		c.saturation*=0.66;
 		tf.textColor = c;
 		tf.smooth = true;
+		tf.filter = new h2d.filter.Glow(color, 0.6, 128,1, 2, true);
 
 		cd.setS("fadeIn", 1);
 	}
