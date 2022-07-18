@@ -1,0 +1,8 @@
+Pomme
+Orange
+Citron
+Chat
+Chien
+Avion
+Tracteur
+Bateau

@@ -298,7 +298,7 @@ class Game extends dn.Process {
 			#if hl
 			if( ca.isKeyboardPressed(K.ESCAPE) )
 				if( !cd.hasSetS("exitWarn",3) )
-					hud.notify(Lang.t._("Press ESCAPE again to exit."));
+					hud.notify("Press ESCAPE again to exit.");
 				else
 					App.ME.exit();
 			#end

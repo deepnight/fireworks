@@ -71,8 +71,8 @@ class App extends dn.Process {
 
 	#if hl
 	public static function onCrash(err:Dynamic) {
-		var title = L.untranslated("Fatal error");
-		var msg = L.untranslated('I\'m really sorry but the game crashed! Error: ${Std.string(err)}');
+		var title = "Fatal error";
+		var msg = 'I\'m really sorry but the game crashed! Error: ${Std.string(err)}';
 		var flags : haxe.EnumFlags<hl.UI.DialogFlags> = new haxe.EnumFlags();
 		flags.set(IsError);
 
@@ -207,9 +207,6 @@ class App extends dn.Process {
 	function initAssets() {
 		// Init game assets
 		Assets.init();
-
-		// Init lang data
-		Lang.init("en");
 
 		// Bind DB hot-reloading callback
 		Const.db.onReload = onDbReload;

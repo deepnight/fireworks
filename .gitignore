@@ -3,6 +3,7 @@ dump/
 res/.tmp/
 res/**/backups/
 *.zip
+res/extras.txt
 
 # VScode
 .vscode/settings.json
