@@ -40,7 +40,7 @@ class Game extends dn.Process {
 		root.add(scroller, Const.DP_BG);
 		scroller.filter = new h2d.filter.Nothing(); // force rendering for pixel perfect
 
-		bg = new h2d.Bitmap( h2d.Tile.fromColor(Const.COLOR_BG), scroller );
+		bg = new h2d.Bitmap( h2d.Tile.fromColor(getBgColor()), scroller );
 		fx = new Fx();
 		hud = new ui.Hud();
 
@@ -54,6 +54,18 @@ class Game extends dn.Process {
 		inter.onKeyDown = onKeyDown;
 
 		start();
+	}
+
+	function getBgColor() : Col {
+		return Col.inlineHex("#25294d");
+	}
+
+	function getMidColor() : Col {
+		return Black;
+	}
+
+	function getSunColor() : Col {
+		return Col.inlineHex("#5059a7");
 	}
 
 
@@ -87,7 +99,7 @@ class Game extends dn.Process {
 			fx.paintLine(
 				lastClick.levelX, lastClick.levelY,
 				cur.levelX, cur.levelY,
-				Const.COLOR_BG.toWhite(0.4)
+				getSunColor()
 			);
 			lastClick = cur;
 		}
@@ -131,11 +143,30 @@ class Game extends dn.Process {
 		gradient.blendMode = Multiply;
 		gradient.alpha = 0.6;
 
+		// Mid gradient
+		var gradient = Assets.tiles.h_get(D.tiles.whiteGradient, bgWrapper);
+		var gh = 0.7 * hei;
+		gradient.scaleX = wid / gradient.tile.width;
+		gradient.scaleY = gh / gradient.tile.height;
+		gradient.y = hei - gh;
+		gradient.blendMode = Add;
+		gradient.colorize( getMidColor().interpolate(getBgColor(),0.5) );
+
+		// Sun gradient
+		var gradient = Assets.tiles.h_get(D.tiles.whiteGradient, bgWrapper);
+		var gh = 0.4 * hei;
+		gradient.scaleX = wid / gradient.tile.width;
+		gradient.scaleY = gh / gradient.tile.height;
+		gradient.y = hei - gh;
+		gradient.blendMode = Add;
+		gradient.colorize( getSunColor() );
+		gradient.alpha = 0.7;
+
 		// Stars
 		var sb = new HSpriteBatch(Assets.tiles.tile, bgWrapper);
 		sb.hasRotationScale = true;
 		sb.blendMode = Add;
-		var c = Const.COLOR_BG.clone();
+		var c = getBgColor();
 		c.saturation*=0.7;
 		c.lightness = 0.8;
 		for(i in 0...700) {
@@ -297,6 +328,19 @@ class Game extends dn.Process {
 	}
 
 
+	function checkControls() {
+		// Exit by pressing ESC twice
+		#if hl
+		if( ca.isKeyboardPressed(K.ESCAPE) )
+			App.ME.goToMainMenu();
+		#end
+
+		// Exit current game
+		if( ca.isPressed(Restart) )
+			App.ME.goToMainMenu();
+
+	}
+
 	/** Main loop **/
 	override function update() {
 		super.update();
@@ -306,22 +350,8 @@ class Game extends dn.Process {
 
 
 		// Global key shortcuts
-		if( !App.ME.anyInputHasFocus() && !ui.Modal.hasAny() && !Console.ME.isActive() ) {
-
-			// Exit by pressing ESC twice
-			#if hl
-			if( ca.isKeyboardPressed(K.ESCAPE) )
-				if( !cd.hasSetS("exitWarn",3) )
-					hud.notify("Press ESCAPE again to exit.");
-				else
-					App.ME.goToMainMenu();
-			#end
-
-			// Exit current game
-			if( ca.isPressed(Restart) )
-				App.ME.goToMainMenu();
-
-		}
+		if( !App.ME.anyInputHasFocus() && !ui.Modal.hasAny() && !Console.ME.isActive() )
+			checkControls();
 	}
 }
 

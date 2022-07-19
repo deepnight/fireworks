@@ -28,7 +28,7 @@ class MainMenu extends Game {
 
 		addOption( L._("Words"), ()->App.ME.startGame( ()->new g.Words() ) );
 		addOption( L._("Alphabet"), ()->App.ME.startGame( ()->new g.Alphabet() ) );
-		addOption( L._("Letters"), ()->App.ME.startGame( ()->new g.RandomTyping() ) );
+		addOption( L._("Random letters"), ()->App.ME.startGame( ()->new g.RandomTyping() ) );
 
 		dn.Process.resizeAll();
 	}
@@ -57,9 +57,9 @@ class MainMenu extends Game {
 		});
 	}
 
-	override function postUpdate() {
-		super.postUpdate();
-
+	
+	override function checkControls() {
+		// super.checkControls();
 		if( ca.isPressed(MenuUp) && cur>0 )
 			cur--;
 
@@ -71,6 +71,11 @@ class MainMenu extends Game {
 
 		if( ca.isPressed(MenuCancel) )
 			App.ME.exit();
+	}
+
+
+	override function postUpdate() {
+		super.postUpdate();
 
 		cursor.y += ( curOption.i.y + curOption.i.height*0.5 - cursor.y ) * 0.5;
 	}

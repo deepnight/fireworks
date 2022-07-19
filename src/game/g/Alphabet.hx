@@ -8,6 +8,10 @@ class Alphabet extends Game {
 		super();
 	}
 
+	override function getBgColor() return Col.inlineHex("#343c4d");
+	override function getMidColor() return Col.inlineHex("#488177");
+	override function getSunColor() return Col.inlineHex("#40ad6b");
+
 	override function onLetterPress(letterIdx:Int) {
 		super.onLetterPress(letterIdx);
 

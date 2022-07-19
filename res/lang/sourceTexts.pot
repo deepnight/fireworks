@@ -10,5 +10,9 @@ msgid "Words"
 msgstr ""
 
 #: "src/game/g/MainMenu.hx"
-msgid "Letters"
+msgid "Alphabet"
+msgstr ""
+
+#: "src/game/g/MainMenu.hx"
+msgid "Random letters"
 msgstr ""

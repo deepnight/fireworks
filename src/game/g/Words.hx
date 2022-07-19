@@ -9,6 +9,10 @@ class Words extends Game {
 		pickWord();
 	}
 
+	override function getBgColor() return Col.inlineHex("#2c1c4d");
+	override function getMidColor() return Red;
+	override function getSunColor() return Yellow;
+
 	function setWord(w:String) {
 		// Cleanup
 		for(e in Letter.ALL)

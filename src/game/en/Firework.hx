@@ -36,7 +36,7 @@ class Firework extends Entity {
 	override function fixedUpdate() {
 		super.fixedUpdate();
 
-		var s = rnd(0.01, 0.02);
+		var s = R.around(0.03);
 		var a = Math.atan2(target.levelY-attachY, target.levelX-attachX);
 		dx += Math.cos(a) * s;
 		dy += Math.sin(a) * s;
