@@ -31,5 +31,6 @@ import tools.LPoint as P;
 import Const.db as DB;
 
 import dn.debug.MemTrack.measure as MM;
+import assets.Lang.t as L;
 
 #end

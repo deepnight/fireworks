@@ -206,6 +206,7 @@ class App extends dn.Process {
 	**/
 	function initAssets() {
 		// Init game assets
+		Lang.init();
 		Assets.init();
 
 		// Bind DB hot-reloading callback

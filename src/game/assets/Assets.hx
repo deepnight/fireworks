@@ -29,8 +29,7 @@ class Assets {
 		fontLarge = new hxd.res.BitmapFont( hxd.Res.fonts.noto_sans_semibold_65_xml.entry ).toFont();
 
 		// Read word files
-		trace(getSysLang());
-		var raw = try hxd.Res.load("words."+getSysLang()+".txt").toText() catch(_) hxd.Res.load("words.en.txt").toText();
+		var raw = try hxd.Res.load("words."+Lang.CUR+".txt").toText() catch(_) hxd.Res.load("words.en.txt").toText();
 		var extra = try hxd.Res.load("extras.txt").toText() catch(_) "";
 		raw += "\n"+extra;
 		var sep = ",";
@@ -49,7 +48,6 @@ class Assets {
 				i++;
 			}
 		}
-		trace(words);
 
 		// Init word picker
 		wordPicker = new RandDeck();
@@ -83,17 +81,6 @@ class Assets {
 				Const.db.reload_const_json( hxd.Res.const.entry.getBytes().toString() );
 			}, 0.2);
 		});
-	}
-
-	public static function getSysLang() {
-		try {
-			var code = hxd.System.getLocale();
-			if( code.indexOf("-")>=0 )
-				code = code.substr(0,code.indexOf("-") );
-			return code.toLowerCase();
-		}
-		catch(_)
-			return "en";
 	}
 
 	public static function cleanUpWord(w:String) : Null<String> {

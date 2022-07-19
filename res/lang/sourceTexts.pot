@@ -1,0 +1,14 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"MIME-Version: 1.0\n"
+
+
+#: "src/game/g/MainMenu.hx"
+msgid "Words"
+msgstr ""
+
+#: "src/game/g/MainMenu.hx"
+msgid "Letters"
+msgstr ""
