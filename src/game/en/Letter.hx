@@ -2,7 +2,6 @@ package en;
 
 class Letter extends Entity {
 	public static var ALL : FixedArray<Letter> = new FixedArray(50);
-	static var recents : Map<Int, Float> = new Map();
 
 	var tf : h2d.Text;
 	public var letterIdx : Int;
@@ -16,7 +15,6 @@ class Letter extends Entity {
 		ALL.push(this);
 
 		this.letterIdx = letterIdx;
-		recents.set(letterIdx, haxe.Timer.stamp());
 
 		spr.set(D.tiles.empty);
 		color = customColor==null ? Col.randomHSL(R.zto(), 1-rnd(0,0.2), 1) : customColor;
@@ -34,6 +32,7 @@ class Letter extends Entity {
 		tf.filter = new h2d.filter.Glow(color, 0.6, 128,1, 2, true);
 
 		cd.setS("fadeIn", 1);
+		spr.alpha = 0;
 	}
 
 	override function dispose() {
@@ -65,14 +64,7 @@ class Letter extends Entity {
 		}, -999999);
 	}
 
-	public static function createOneRandom() : Letter {
-		// Try to pick a non-recent letter
-		var lidx = R.irnd(0,25);
-		var limit = 100;
-		while( recents.exists(lidx) && haxe.Timer.stamp()-recents.get(lidx)<=5 && limit-->0 )
-			lidx = R.irnd(0,25);
-
-
+	public static function createOne(lidx:Int) : Letter {
 		var l = new Letter(lidx);
 
 		// Try to find an empy screen location

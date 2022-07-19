@@ -32,6 +32,7 @@ class Game extends dn.Process {
 		ME = this;
 		ca = App.ME.controller.createAccess();
 		ca.lockCondition = isGameControllerLocked;
+		ca.lock(0.1);
 		createRootInLayers(App.ME.root, Const.DP_BG);
 		dn.Gc.runNow();
 
@@ -120,6 +121,7 @@ class Game extends dn.Process {
 
 
 	function renderBg() {
+		var rseed = new dn.Rand(1);
 		bgWrapper.removeChildren();
 
 		// Dark gradient
@@ -130,36 +132,36 @@ class Game extends dn.Process {
 		gradient.alpha = 0.6;
 
 		// Stars
-		var sb = new HSpriteBatch(Assets.tiles.tile, scroller);
+		var sb = new HSpriteBatch(Assets.tiles.tile, bgWrapper);
 		sb.hasRotationScale = true;
 		sb.blendMode = Add;
 		var c = Const.COLOR_BG.clone();
 		c.saturation*=0.7;
 		c.lightness = 0.8;
 		for(i in 0...700) {
-			var be = Assets.tiles.hbe_getRandom(sb, D.tiles.pixel);
+			var be = Assets.tiles.hbe_get(sb, D.tiles.pixel);
 			be.colorize(c);
-			be.scaleX = be.scaleY = irnd(1,2);
-			be.x = rnd(0,wid);
-			be.y = rnd(0,hei-30);
-			be.alpha = 0.1 + 0.9 * (1-be.y/hei) * rnd(0.3,1);
+			be.scaleX = be.scaleY = rseed.irange(1,2);
+			be.x = rseed.range(0,wid);
+			be.y = rseed.range(0,hei-30);
+			be.alpha = 0.1 + 0.9 * (1-be.y/hei) * rseed.range(0.3,1);
 		}
 
 		// Trees
-		var sb = new HSpriteBatch(Assets.tiles.tile, scroller);
+		var sb = new HSpriteBatch(Assets.tiles.tile, bgWrapper);
 		sb.hasRotationScale = true;
-		var x = irnd(0,10);
+		var x = rseed.irange(0,10);
 		var s = 2;
 		while( x<wid ) {
-			var be = Assets.tiles.hbe_getRandom(sb, D.tiles.tree);
+			var be = Assets.tiles.hbe_getRandom(sb, D.tiles.tree, rseed.random);
 			be.setCenterRatio();
-			be.scaleX = s * rnd(0.9,1.1,true);
-			be.scaleY = s * rnd(0.8,1.1);
-			be.rotation = rnd(0,0.1,true);
+			be.scaleX = s * rseed.range(0.9,1.1,true);
+			be.scaleY = s * rseed.range(0.8,1.1);
+			be.rotation = rseed.range(0,0.1,true);
 			be.colorize(0x0);
 			be.x = x;
-			be.y = hei + irnd(-6,3);
-			x += irnd(6,10)*s;
+			be.y = hei + rseed.irange(-6,3);
+			x += rseed.irange(6,10)*s;
 		}
 	}
 
@@ -312,7 +314,7 @@ class Game extends dn.Process {
 				if( !cd.hasSetS("exitWarn",3) )
 					hud.notify("Press ESCAPE again to exit.");
 				else
-					App.ME.exit();
+					App.ME.goToMainMenu();
 			#end
 
 			// Exit current game

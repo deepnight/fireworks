@@ -220,11 +220,17 @@ class App extends dn.Process {
 
 		// Gamepad bindings
 		controller.bindPad(Restart, SELECT);
-		controller.bindPad(MenuCancel, B);
+		controller.bindPad(MenuUp, [DPAD_UP, LSTICK_UP, RSTICK_UP]);
+		controller.bindPad(MenuDown, [DPAD_DOWN, LSTICK_DOWN, RSTICK_DOWN]);
+		controller.bindPad(MenuConfirm, [A, X, RB, RT]);
+		controller.bindPad(MenuCancel, [B, LB, LT]);
 
 		// Keyboard bindings
 		controller.bindKeyboardCombo(Restart, [K.R, K.SHIFT]);
 		controller.bindKeyboard(ScreenshotMode, K.F9);
+		controller.bindKeyboard(MenuUp, [K.UP, K.PGUP, K.Z, K.W]);
+		controller.bindKeyboard(MenuDown, [K.DOWN, K.PGDOWN, K.S]);
+		controller.bindKeyboard(MenuConfirm, [K.ENTER, K.SPACE]);
 		controller.bindKeyboard(MenuCancel, K.ESCAPE);
 
 		// Debug controls

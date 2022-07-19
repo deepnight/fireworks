@@ -1,12 +1,18 @@
 package g;
 
 class RandomTyping extends Game {
-	var maxLetters = 1;
+	var letterCount = 1;
 	var curSubScore = 0;
 	var score = 0;
+	var lettersDeck : dn.struct.RandDeck<Int>;
 
 	public function new() {
 		super();
+
+		lettersDeck = new RandDeck();
+		for(i in 0...26)
+			lettersDeck.push(i);
+		lettersDeck.shuffle();
 	}
 
 	override function onLetterPress(letterIdx:Int) {
@@ -19,16 +25,17 @@ class RandomTyping extends Game {
 		e.validate();
 		score++;
 		curSubScore++;
-		if( curSubScore>=maxLetters*10 ) {
+		if( curSubScore>=letterCount*10 ) {
 			curSubScore = 0;
-			maxLetters++;
+			letterCount++;
 		}
 	}
 
 	override function fixedUpdate() {
 		super.fixedUpdate();
 
-		if( Letter.count()<maxLetters )
-			Letter.createOneRandom();
+		if( Letter.count()==0 )
+			for(i in 0...letterCount)
+				Letter.createOne( lettersDeck.draw() );
 	}
 }

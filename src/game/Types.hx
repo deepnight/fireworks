@@ -1,8 +1,12 @@
 /**	This abstract enum is used by the Controller class to bind general game actions to actual keyboard keys or gamepad buttons. **/
 enum abstract GameAction(Int) to Int {
 	var Restart;
-	var MenuCancel;
 	var ScreenshotMode;
+
+	var MenuUp;
+	var MenuDown;
+	var MenuConfirm;
+	var MenuCancel;
 
 	var DebugTurbo;
 	var DebugSlowMo;
