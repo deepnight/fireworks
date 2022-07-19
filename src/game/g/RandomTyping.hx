@@ -15,6 +15,10 @@ class RandomTyping extends Game {
 		lettersDeck.shuffle();
 	}
 
+	override function getBgColor() return Col.inlineHex("#4d2424");
+	override function getMidColor() return Col.inlineHex("#375a79");
+	override function getSunColor() return Yellow;
+
 	override function onLetterPress(letterIdx:Int) {
 		super.onLetterPress(letterIdx);
 
