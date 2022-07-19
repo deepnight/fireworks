@@ -315,9 +315,9 @@ class Game extends dn.Process {
 					App.ME.exit();
 			#end
 
-			// Restart whole game
+			// Exit current game
 			if( ca.isPressed(Restart) )
-				App.ME.startGame();
+				App.ME.goToMainMenu();
 
 		}
 	}

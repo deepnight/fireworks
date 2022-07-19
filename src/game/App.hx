@@ -41,7 +41,7 @@ class App extends dn.Process {
 		Console.ME.enableStats();
 		#end
 
-		startGame();
+		goToMainMenu();
 	}
 
 
@@ -98,26 +98,26 @@ class App extends dn.Process {
 	#end
 
 
+	public function goToMainMenu() {
+		startGame( ()->new g.MainMenu() );
+	}
+
 	/** Start game process **/
-	public function startGame() {
+	public function startGame( instanceCreator:Void->Game ) {
 		if( Game.exists() ) {
 			// Kill previous game instance first
 			Game.ME.destroy();
 			dn.Process.updateAll(1); // ensure all garbage collection is done
-			_createGameInstance();
+			instanceCreator();
 			hxd.Timer.skip();
 		}
 		else {
 			// Fresh start
 			delayer.addF( ()->{
-				_createGameInstance();
+				instanceCreator();
 				hxd.Timer.skip();
 			}, 1 );
 		}
-	}
-
-	final function _createGameInstance() {
-		new g.Words();
 	}
 
 
